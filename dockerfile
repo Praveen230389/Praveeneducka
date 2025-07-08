@@ -1,42 +1,17 @@
-##################################
-# Stage 1: Build Stage
-##################################
-FROM node:18-alpine AS builder
+FROM ubuntu:22.04
 
-# Add metadata for authorship and app identification
-LABEL maintainer="Amitabh Soni <amitabhdevops2024@gmail.com>" \
-      app="gemini" \
-      stage="build"
+# Install any packages you need
+RUN apt-get update && apt-get install -y \
+    curl \
+    nginx \
+    vim \
+    # any other packages you need
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# Copy your files in
+COPY ./ /app
 
-# Copy source and build
-COPY . .
-RUN npm run build
+# Example: run a script to start your app
+RUN chmod +x /app/start.sh
 
-# Clean up dev dependencies after build
-RUN rm -rf node_modules && npm cache clean --force
-
-##################################
-# Stage 2: Production Stage
-##################################
-FROM node:18-alpine AS production
-
-# Add metadata for the final image
-LABEL maintainer="Amitabh Soni <amitabhdevops2024@gmail.com>" \
-      app="gemini" \
-      stage="production"
-
-WORKDIR /app
-
-# Copy minimal required files
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.mjs ./
-
-# Set production environment
-ENV NODE_ENV=production
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["/app/start.sh"]
