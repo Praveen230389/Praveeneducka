@@ -19,3 +19,12 @@ CMD ["/app/start.sh"]
 COPY ./ /app
 RUN chmod +x /app/start.sh
 CMD ["/app/start.sh"]
+
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+
+COPY ./ /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
+
