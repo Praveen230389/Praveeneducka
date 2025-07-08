@@ -15,3 +15,7 @@ COPY ./ /app
 RUN chmod +x /app/start.sh
 
 CMD ["/app/start.sh"]
+
+COPY ./ /app
+RUN chmod +x /app/start.sh
+CMD ["/app/start.sh"]
