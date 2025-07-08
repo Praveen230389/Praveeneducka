@@ -29,10 +29,6 @@ LABEL maintainer="Amitabh Soni <amitabhdevops2024@gmail.com>" \
 
 WORKDIR /app
 
-# Install only production dependencies
-COPY package.json package-lock.json* ./
-RUN npm ci --production && npm cache clean --force
-
 # Copy minimal required files
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
