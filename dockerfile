@@ -10,10 +10,6 @@ LABEL maintainer="Amitabh Soni <amitabhdevops2024@gmail.com>" \
 
 WORKDIR /app
 
-# Install build dependencies
-COPY package.json package-lock.json* ./
-RUN npm ci
-
 # Copy source and build
 COPY . .
 RUN npm run build
